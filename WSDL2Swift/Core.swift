@@ -164,7 +164,7 @@ struct WSDL {
             "name": service.name,
             "path":  {
                 let p = URL(string: service.port.location)?.path ?? (service.port.location as NSString).lastPathComponent
-                return String(p.characters.dropFirst(p.characters.first == "/" ? 1 : 0))
+                return String(p.dropFirst(p.first == "/" ? 1 : 0))
             }(),
             "operations": portType.operations.map { op -> [String: String] in
                 let inputMessage = messages.first {$0.name == replaceTargetNameSpace(op.inputMessage, prefix: "")}!
@@ -328,7 +328,7 @@ struct XSDType {
                     return nil
             }
             parseChildElements(ext["sequence"])
-            base = b.hasPrefix("tns:") ? b.substring(from: b.characters.index(b.characters.startIndex, offsetBy: "tns:".characters.count)) : b
+            base = b.hasPrefix("tns:") ? b.substring(from: b.index(b.startIndex, offsetBy: "tns:".count)) : b
         default:
             NSLog("%@", "Warning: unsupported node as type.*: \(n.xmlCompact)")
             base = nil
