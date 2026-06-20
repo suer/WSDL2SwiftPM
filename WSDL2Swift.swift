@@ -1,7 +1,6 @@
 import Foundation
 import AEXML
 import BrightFutures
-import ISO8601
 import Fuzi
 
 public protocol SOAPParamConvertible {
@@ -261,12 +260,17 @@ extension Int64: ExpressibleByXML, SOAPParamConvertible {
     }
 }
 extension Date: ExpressibleByXML, SOAPParamConvertible {
+    private static let iso8601DateFormatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime]
+        return formatter
+    }()
     public init?(xmlValue: String) throws {
-        guard let v = NSDate(iso8601String: xmlValue) as Date? else { throw SOAPParamError.unknown }
+        guard let v = Date.iso8601DateFormatter.date(from: xmlValue) else { throw SOAPParamError.unknown }
         self = v
     }
     public func xmlElements(name: String) -> [AEXMLElement] {
-        return [AEXMLElement(name: name, value: (self as NSDate).iso8601String())]
+        return [AEXMLElement(name: name, value: Date.iso8601DateFormatter.string(from: self))]
     }
 }
 extension Data: ExpressibleByXML, SOAPParamConvertible {
