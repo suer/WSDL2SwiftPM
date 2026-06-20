@@ -363,7 +363,7 @@ struct XSDType {
             parseChildElements(ext["sequence"])
             base =
                 b.hasPrefix("tns:")
-                ? b.substring(from: b.index(b.startIndex, offsetBy: "tns:".count)) : b
+                ? String(b.dropFirst("tns:".count)) : b
         default:
             NSLog("%@", "Warning: unsupported node as type.*: \(n.xmlCompact)")
             base = nil
