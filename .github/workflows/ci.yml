@@ -18,6 +18,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  swiftlint:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+      - name: Run SwiftLint
+        uses: norio-nomura/action-swiftlint@9f4dcd7fd46b4e75d7935cf2f4df406d5cae3684 # 3.2.1
+        with:
+          args: --strict
+
   swift-format:
     permissions:
       contents: read
@@ -34,7 +48,7 @@ jobs:
           swift format lint --parallel --recursive --strict Package.swift WSDL2Swift.swift WSDL2Swift/
 
   ci:
-    needs: [swift-format]
+    needs: [swiftlint, swift-format]
     permissions:
       contents: read
     runs-on: macos-26
