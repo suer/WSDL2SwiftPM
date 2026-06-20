@@ -1,0 +1,23 @@
+included:
+  - WSDL2Swift
+  - WSDL2Swift.swift
+  - Tests
+excluded:
+  - Tests/WSDL2SwiftTests/WSDL+TempConvert.swift
+disabled_rules:
+  - trailing_comma # covered-by swift-format
+  - opening_brace # covered-by swift-format
+  - force_try
+  - identifier_name
+  - todo
+  - type_name
+
+file_length:
+  - 540
+function_body_length:
+  - 65
+large_tuple:
+  - 3
+line_length:
+  - 200
+

@@ -22,7 +22,7 @@ extension XSDType {
                 "xmlns:S": "http://schemas.xmlsoap.org/soap/envelope/",
                 "xmlns:tns": tns,
             ])
-        let _ = envelope.addChild(name: "S:Header")
+        _ = envelope.addChild(name: "S:Header")
         let body = envelope.addChild(name: "S:Body")
         // assumes "tns:" prefixed for all actions. JAX-WS requires prefixed or xmlns specification on this node.
         xmlElements(name: "tns:" + action).forEach { body.addChild($0) }
