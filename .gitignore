@@ -28,4 +28,5 @@ xcuserdata/
 *.xccheckout
 *.xcscmblueprint
 
-
+# Swift Package Manager
+.build/
