@@ -1,12 +1,6 @@
 WSDL2Swift
 ==========
 
-
-[![Build Status](https://app.bitrise.io/app/b3e5e6ff40591613/status.svg?token=34E9CkQQZr8WZtfpdQVZTw&branch=master)](https://app.bitrise.io/app/b3e5e6ff40591613)
-[![Version](https://img.shields.io/cocoapods/v/WSDL2Swift.svg?style=flat)](https://cocoapods.org/pods/WSDL2Swift)
-[![License](https://img.shields.io/cocoapods/l/WSDL2Swift.svg?style=flat)](https://cocoapods.org/pods/WSDL2Swift)
-[![Platform](https://img.shields.io/cocoapods/p/WSDL2Swift.svg?style=flat)](https://cocoapods.org/pods/WSDL2Swift)
-
 Swift alternative to WSDL2ObjC making a SOAP request & parsing its response as defined in WSDL.
 Objective-C free.
 
@@ -22,7 +16,7 @@ Input
 Output
 
 * a Swift file which works as SOAP client
-	* Swift 4 (Xcode 9)
+	* Swift 5
 	* NSURLSession for connection
 	* [BrightFutures](https://github.com/Thomvis/BrightFutures) for returning asynchronous requests
 	* [Fuzi](https://github.com/cezheng/Fuzi) for fast parsing xmls
@@ -33,20 +27,15 @@ Output
 ### Build
 
 ```sh
-bundle install
-bundle exec fastlane archive
+swift build
 ```
-
-you can build and debug with WSDL2Swift scheme of the xcodeproj. Archive build is not supported yet.
-
-product executable is portable, as long as shipped with ./Frameworks and ./Stencils.
 
 ### Generate
 
 generate WSDL.swift from WSDL and XSD xmls:
 
 ```sh
-./build/Build/Products/Release/WSDL2Swift --out path/to/WSDL.swift path/to/service.wsdl.xml path/to/service.xsd.xml
+swift run WSDL2SwiftCLI --public-memberwise-init --out Tests/WSDL2SwiftTests/WSDL.swift Tests/WSDL2SwiftTests/tempconvert.xml
 ```
 
 the order of input files is important.
@@ -93,8 +82,8 @@ service.request(TempConvert_CelsiusToFahrenheit(Celsius: "23.4")).onComplete { r
 
 with dependencies:
 
-```ruby
-pod 'WSDL2Swift'
+```swift
+.package(url: "https://github.com/suer/WSDL2SwiftPM.git", exact: "x.y.z"),
 ```
 
 note that pod WSDL2Swift just introduces runtime dependencies. it does not provide WSDL2Swift executable binary nor generated WSDL client Swift files.
