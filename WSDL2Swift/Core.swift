@@ -4,7 +4,7 @@ import Stencil
 
 
 private func template(named name: String) -> Template {
-    return try! Template(URL: Bundle.main.url(forResource: name, withExtension: "stencil", subdirectory: "Stencils")!)
+    return try! Template(URL: Bundle.module.url(forResource: name, withExtension: "stencil", subdirectory: "Stencils")!)
 }
 
 
