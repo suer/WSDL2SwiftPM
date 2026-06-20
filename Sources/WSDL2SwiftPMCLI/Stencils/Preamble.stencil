@@ -1,5 +1,5 @@
 // swift-format-ignore-file
-import WSDL2Swift
+import WSDL2SwiftPM
 import BrightFutures
 import AEXML
 import Foundation

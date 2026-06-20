@@ -79,7 +79,7 @@ jobs:
 
       - name: Generate SOAP client code
         run: |
-          swift run WSDL2SwiftCLI --public-memberwise-init --out Tests/WSDL2SwiftTests/WSDL.swift Tests/WSDL2SwiftTests/tempconvert.xml
+          swift run WSDL2SwiftPMCLI --public-memberwise-init --out Tests/WSDL2SwiftTests/WSDL.swift Tests/WSDL2SwiftTests/tempconvert.xml
 
       - name: Run test
         run: |
