@@ -5,7 +5,8 @@ import Stencil
 private func template(named name: String) -> Template {
     return try! Template(
         URL: Bundle.module.url(
-            forResource: name, withExtension: "stencil", subdirectory: "Stencils")!)
+            forResource: name, withExtension: "stencil", subdirectory: "Stencils")!
+    )
 }
 
 private let typeMap: [String: String] = [
@@ -482,8 +483,8 @@ struct XSDElement {
         let type: Type
         if let t = node.attributes["type"] {
             // types external to element
+            // ignore namespace
             type = .atomic(
-                // ignore namespace
                 replaceTargetNameSpace(t, prefix: prefix).components(separatedBy: ":").last ?? t)
         } else {
             // types internal to element
@@ -501,8 +502,8 @@ struct XSDElement {
         return self.init(
             name: name,
             type: type,
+            minOccurs: minOccurs.flatMap { UInt($0) } ?? 1,  // XSD default = 1
             // XSD default = 1
-            minOccurs: minOccurs.flatMap { UInt($0) } ?? 1,
             maxOccurs: maxOCcurs.flatMap { $0 == "unbounded" ? UInt.max : UInt($0) } ?? 1,
             xmlns: definedByRootElement ? "tns" : "")
     }
