@@ -84,7 +84,6 @@ extension WSDLService {
         let promise = Promise<O, WSDLOperationError>()
 
         let soapRequest = parameters.soapRequest(targetNamespace)
-        //        print("request to \(endpoint + path) using: \(soapRequest.xml)")
 
         var request = URLRequest(url: URL(string: endpoint)!.appendingPathComponent(path))
         request.httpMethod = "POST"
@@ -94,15 +93,12 @@ extension WSDLService {
             forHTTPHeaderField: "Content-Type")
         request.addValue("WSDL2Swift", forHTTPHeaderField: "User-Agent")
         if let data = soapRequest.xml.data(using: .utf8) {
-            //            request.addValue(String(data.length), forHTTPHeaderField: "Content-Length")
             request.httpBody = data
         }
-        //        NSLog("%@", "headers: \(request.allHTTPHeaderFields)")
         request = interceptURLRequest?(request) ?? request
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             let (data, _, error) =
                 self.interceptResponse?(data, response, error) ?? (data, response, error)
-            //            NSLog("%@", "\((response, error))")
 
             if let error = error {
                 promise.failure(.urlSession(error))
@@ -113,7 +109,6 @@ extension WSDLService {
                 promise.failure(.invalidXML)
                 return
             }
-            //            NSLog("%@", "\(String(data: d, encoding: .utf8)!)")
 
             guard let soapMessage = SOAPMessage(xml: xml, targetNamespace: self.targetNamespace)
             else {
@@ -158,13 +153,6 @@ public struct SOAPMessage {
     private let targetNamespace: String
 
     public init?(xml: Fuzi.XMLDocument, targetNamespace: String) {
-        //        guard xml.root!.namespaceHref == "http://schemas.xmlsoap.org/soap/envelope/",
-        //            let soapNameSpace = xml.root!.namespace else {
-        //            return nil
-        //        }
-        //        guard let soapNameSpace = (xml.root!.attributes.first {$0.key.hasPrefix("xmlns:") && $0.value == "http://schemas.xmlsoap.org/soap/envelope/"}?.key.components(separatedBy: ":").last) else {
-        //            return nil // invalid soap message
-        //        }
         self.targetNamespace = targetNamespace
         self.soapNameSpace = ""
         guard let body = xml.root!.firstChild(staticTag: "Body") else { return nil }
