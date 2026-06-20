@@ -50,5 +50,15 @@ let package = Package(
                 .copy("Stencils")
             ],
         ),
+        .testTarget(
+            name: "WSDL2SwiftTests",
+            dependencies: [
+                "WSDL2Swift"
+            ],
+            path: "Tests",
+            exclude: [
+                "WSDL2SwiftTests/tempconvert.xml"
+            ],
+        ),
     ],
 )
