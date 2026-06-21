@@ -10,7 +10,7 @@ let package = Package(
         .library(
             name: "WSDL2Swift",
             targets: ["WSDL2Swift"]),
-         .executable(
+        .executable(
             name: "WSDL2SwiftCLI",
             targets: ["WSDL2SwiftCLI"]),
     ],
