@@ -1,10 +1,10 @@
-WSDL2Swift
-==========
+WSDL2SwiftPM
+============
 
 Swift alternative to WSDL2ObjC making a SOAP request & parsing its response as defined in WSDL.
 Objective-C free.
 
-Stubs for unit test can be implemented using [Toki](https://github.com/banjun/Toki).
+This repository is a fork of [banjun/WSDL2Swift](https://github.com/banjun/WSDL2Swift), a Swift Package Manager port, and merges [banjun/Toki](https://github.com/banjun/Toki) for test stub functionality.
 
 ## Input & Output
 
@@ -17,7 +17,7 @@ Output
 
 * a Swift file which works as SOAP client
 	* Swift 5
-	* NSURLSession for connection
+	* URLSession for connection
 	* [BrightFutures](https://github.com/Thomvis/BrightFutures) for returning asynchronous requests
 	* [Fuzi](https://github.com/cezheng/Fuzi) for fast parsing xmls
 	* [AEXML](https://github.com/tadija/AEXML) for generating xmls
@@ -74,21 +74,28 @@ public struct TempConvert_CelsiusToFahrenheitResponse {
 code using the generated client:
 
 ```swift
-let service = TempConvert(endpoint: "http://www.w3schools.com")
+let service = TempConvert(endpoint: "https://www.w3schools.com")
 service.request(TempConvert_CelsiusToFahrenheit(Celsius: "23.4")).onComplete { r in
     NSLog("%@", "TempConvert_CelsiusToFahrenheit(Celsius: \"23.4\") = \(r)")
 }
 ```
 
-with dependencies:
+with dependencies in `Package.swift`:
 
 ```swift
+// in dependencies:
 .package(url: "https://github.com/suer/WSDL2SwiftPM.git", exact: "x.y.z"),
+
+// in targets:
+.target(
+    name: "YourTarget",
+    dependencies: [
+        .product(name: "WSDL2SwiftPM", package: "WSDL2SwiftPM"),
+    ]
+),
 ```
 
-note that pod WSDL2Swift just introduces runtime dependencies. it does not provide WSDL2Swift executable binary nor generated WSDL client Swift files.
-
-sometimes, somewhere in your dependencies chain (transitive framework dependencies or test bundle), header search paths for libxml2 is required. see podspec to add manually.
+note that WSDL2SwiftPM just introduces runtime dependencies. it does not provide WSDL2SwiftPMCLI executable binary nor generated WSDL client Swift files.
 
 ### Customize
 
@@ -104,20 +111,12 @@ public var characterSetInContentType: CharacterSetInContentType {
 
 By default, `unspecified` is set.
 
-## Example
-
-iOSWSDL2Swift target in xcodeproj is an example using WSDL2Swift.
-it generates `WSDL+(ServiceName).swift` at the first step of build and use it from ViewController.swift.
-
-you need to place your WSDL and XSD xmls into exampleWSDLS folder.
-
-
 ## Architecture
 
 usage point of view...
 
 * initialize Service with endpoint URL (endpoint URL can be changed after generating `WSDL+(ServiceName).swift`)
 * initialize request parameter with `ServiceName_OperationName(...)`
-* `Service.request(param)` to get `Future` that will be completed by `NSURLSession` completion
+* `Service.request(param)` to get `Future` that will be completed by `URLSession` completion
 * parameters and models are typed by xsd definition (even with nullability)
 
