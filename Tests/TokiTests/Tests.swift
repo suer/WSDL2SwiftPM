@@ -1,5 +1,4 @@
 import AEXML
-import OHHTTPStubs
 import Testing
 import Toki
 import WSDL2SwiftPM
@@ -22,7 +21,7 @@ struct TempConvertTests {
             TempConvert_CelsiusToFahrenheitResponse(CelsiusToFahrenheitResult: "999")
         )
         defer {
-            HTTPStubs.removeStub(stub)
+            Toki.removeStub(stub)
         }
 
         let future = service.request(TempConvert_CelsiusToFahrenheit(Celsius: "30"))
@@ -40,7 +39,7 @@ struct TempConvertTests {
             TempConvert_FahrenheitToCelsiusResponse(FahrenheitToCelsiusResult: "1234")
         )
         defer {
-            HTTPStubs.removeStub(stub)
+            Toki.removeStub(stub)
         }
 
         let future = service.request(TempConvert_FahrenheitToCelsius(Fahrenheit: "80"))
