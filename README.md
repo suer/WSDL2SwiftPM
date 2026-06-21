@@ -35,7 +35,7 @@ swift build
 generate WSDL.swift from WSDL and XSD xmls:
 
 ```sh
-swift run WSDL2SwiftCLI --public-memberwise-init --out Tests/WSDL2SwiftTests/WSDL.swift Tests/WSDL2SwiftTests/tempconvert.xml
+swift run WSDL2SwiftPMCLI --public-memberwise-init --out Tests/WSDL2SwiftTests/WSDL.swift Tests/WSDL2SwiftTests/tempconvert.xml
 ```
 
 the order of input files is important.

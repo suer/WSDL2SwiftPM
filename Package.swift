@@ -8,11 +8,11 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "WSDL2Swift",
-            targets: ["WSDL2Swift"]),
+            name: "WSDL2SwiftPM",
+            targets: ["WSDL2SwiftPM"]),
         .executable(
-            name: "WSDL2SwiftCLI",
-            targets: ["WSDL2SwiftCLI"]),
+            name: "WSDL2SwiftPMCLI",
+            targets: ["WSDL2SwiftPMCLI"]),
     ],
     dependencies: [
         .package(url: "https://github.com/tadija/AEXML.git", exact: "4.7.0"),
@@ -24,41 +24,34 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "WSDL2Swift",
+            name: "WSDL2SwiftPM",
             dependencies: [
                 "AEXML",
                 "BrightFutures",
                 "Fuzi",
             ],
-            path: ".",
-            exclude: [
-                "WSDL2Swift",
-                "Tests",
-                "LICENSE",
-                "README.md",
-            ],
-            sources: ["WSDL2Swift.swift"],
+            path: "Sources/WSDL2SwiftPM",
         ),
         .executableTarget(
-            name: "WSDL2SwiftCLI",
+            name: "WSDL2SwiftPMCLI",
             dependencies: [
-                "WSDL2Swift",
+                "WSDL2SwiftPM",
                 "Commander",
                 "Stencil",
             ],
-            path: "WSDL2Swift",
+            path: "Sources/WSDL2SwiftPMCLI",
             resources: [
                 .copy("Stencils")
             ],
         ),
         .testTarget(
-            name: "WSDL2SwiftTests",
+            name: "WSDL2SwiftPMTests",
             dependencies: [
-                "WSDL2Swift"
+                "WSDL2SwiftPM"
             ],
-            path: "Tests",
+            path: "Tests/WSDL2SwiftPM",
             exclude: [
-                "WSDL2SwiftTests/tempconvert.xml"
+                "tempconvert.xml"
             ],
         ),
     ],
