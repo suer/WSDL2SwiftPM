@@ -90,12 +90,57 @@ with dependencies in `Package.swift`:
 .target(
     name: "YourTarget",
     dependencies: [
-        .product(name: "WSDL2SwiftPM", package: "WSDL2SwiftPM"),
+        "WSDL2SwiftPM",
     ]
 ),
 ```
 
 note that WSDL2SwiftPM just introduces runtime dependencies. it does not provide WSDL2SwiftPMCLI executable binary nor generated WSDL client Swift files.
+
+### Testing with stubs
+
+Toki provides HTTP stub functionality for testing WSDL services using [OHHTTPStubs](https://github.com/AliSoftware/OHHTTPStubs).
+
+Add Toki to your test target in `Package.swift`:
+
+```swift
+.testTarget(
+    name: "YourTests",
+    dependencies: [
+        "WSDL2SwiftPM",
+        .product(name: "Toki", package: "WSDL2SwiftPM"),
+    ]
+),
+```
+
+In your test file, conform the service to `WSDLServiceStubbable` and add the `soapRequest` helper:
+
+```swift
+import Toki
+import AEXML
+
+extension YourService: WSDLServiceStubbable {}
+extension WSDLService {
+    public func soapRequest<R: XSDType>(_ response: R, _ tns: String) -> AEXMLDocument {
+        return response.soapRequest(tns)
+    }
+}
+```
+
+Then stub requests in your tests:
+
+```swift
+let service = YourService(endpoint: "http://localhost/")
+
+let stub = Toki.stub(
+    service,
+    YourService_RequestType.self,
+    YourService_ResponseType(someField: "mocked value")
+)
+defer { Toki.removeStub(stub) }
+
+let result = try await service.request(YourService_RequestType()).get()
+```
 
 ### Customize
 
