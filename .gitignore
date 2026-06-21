@@ -30,3 +30,5 @@ xcuserdata/
 
 # Swift Package Manager
 .build/
+
+WSDL+TempConvert.swift

@@ -33,6 +33,7 @@ let package = Package(
             path: ".",
             exclude: [
                 "WSDL2Swift",
+                "Tests",
                 "LICENSE",
                 "README.md",
             ],
