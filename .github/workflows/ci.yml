@@ -45,7 +45,7 @@ jobs:
         run: swift --version
       - name: Run swift-format
         run: |
-          swift format lint --parallel --recursive --strict Package.swift WSDL2Swift.swift WSDL2Swift/
+          swift format lint --parallel --recursive --strict Package.swift WSDL2Swift.swift WSDL2Swift/ Tests/
 
   ci:
     needs: [swiftlint, swift-format]
@@ -76,3 +76,11 @@ jobs:
           swift build --triple "$TARGET_TRIPLE" -Xswiftc -sdk -Xswiftc $(xcrun --sdk iphonesimulator --show-sdk-path) -Xcc -isysroot -Xcc $(xcrun --sdk iphonesimulator --show-sdk-path)
         env:
           TARGET_TRIPLE: arm64-apple-ios18.0-simulator
+
+      - name: Generate SOAP client code
+        run: |
+          swift run WSDL2SwiftCLI --public-memberwise-init --out Tests/WSDL2SwiftTests/WSDL.swift Tests/WSDL2SwiftTests/tempconvert.xml
+
+      - name: Run test
+        run: |
+          swift test
