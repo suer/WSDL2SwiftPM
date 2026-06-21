@@ -47,6 +47,10 @@ public enum Toki {
                 requestMatcher: requestMatcher, dataModifier: requestDataModifier),
             withStubResponse: service.stubBuilder(response))
     }
+
+    public static func removeStub(_ stub: HTTPStubsDescriptor) {
+        HTTPStubs.removeStub(stub)
+    }
 }
 
 // extension for stub request and response in WSDLService

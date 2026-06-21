@@ -70,7 +70,6 @@ let package = Package(
             dependencies: [
                 "WSDL2SwiftPM",
                 "Toki",
-                "OHHTTPStubs",
             ],
             path: "Tests/TokiTests",
         ),
