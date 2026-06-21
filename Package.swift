@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "WSDL2Swift",
+    name: "WSDL2SwiftPM",
     platforms: [
         .iOS(.v13)
     ],
