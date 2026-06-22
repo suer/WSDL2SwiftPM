@@ -1,5 +1,4 @@
 import AEXML
-import BrightFutures
 import Foundation
 import Fuzi
 
@@ -79,10 +78,8 @@ extension WSDLService {
     }
 
     public func requestGeneric<I: XSDType, O: XSDType & ExpressibleByXML>(_ parameters: I)
-        -> Future<O, WSDLOperationError>
+        async throws -> O
     {
-        let promise = Promise<O, WSDLOperationError>()
-
         let soapRequest = parameters.soapRequest(targetNamespace)
 
         var request = URLRequest(url: URL(string: endpoint)!.appendingPathComponent(path))
@@ -96,39 +93,41 @@ extension WSDLService {
             request.httpBody = data
         }
         request = interceptURLRequest?(request) ?? request
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            let (data, _, error) =
-                self.interceptResponse?(data, response, error) ?? (data, response, error)
 
-            if let error = error {
-                promise.failure(.urlSession(error))
-                return
-            }
+        return try await withCheckedThrowingContinuation { continuation in
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                let (data, _, error) =
+                    self.interceptResponse?(data, response, error) ?? (data, response, error)
 
-            guard let d = data, let xml = try? XMLDocument(data: d) else {
-                promise.failure(.invalidXML)
-                return
-            }
-
-            guard let soapMessage = SOAPMessage(xml: xml, targetNamespace: self.targetNamespace)
-            else {
-                promise.failure(.invalidXMLContent)
-                return
-            }
-
-            guard let out = O(soapMessage: soapMessage) else {
-                if let fault = soapMessage.body.fault {
-                    promise.failure(.soapFault(fault))
-                } else {
-                    promise.failure(.invalidXMLContent)
+                if let error = error {
+                    continuation.resume(throwing: WSDLOperationError.urlSession(error))
+                    return
                 }
-                return
-            }
 
-            promise.success(out)
+                guard let d = data, let xml = try? XMLDocument(data: d) else {
+                    continuation.resume(throwing: WSDLOperationError.invalidXML)
+                    return
+                }
+
+                guard let soapMessage = SOAPMessage(xml: xml, targetNamespace: self.targetNamespace)
+                else {
+                    continuation.resume(throwing: WSDLOperationError.invalidXMLContent)
+                    return
+                }
+
+                guard let out = O(soapMessage: soapMessage) else {
+                    if let fault = soapMessage.body.fault {
+                        continuation.resume(throwing: WSDLOperationError.soapFault(fault))
+                    } else {
+                        continuation.resume(throwing: WSDLOperationError.invalidXMLContent)
+                    }
+                    return
+                }
+
+                continuation.resume(returning: out)
+            }
+            task.resume()
         }
-        task.resume()
-        return promise.future
     }
 
     // Default charset is unspecified.

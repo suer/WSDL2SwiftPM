@@ -4,7 +4,8 @@ import PackageDescription
 let package = Package(
     name: "WSDL2SwiftPM",
     platforms: [
-        .iOS(.v13)
+        .iOS(.v13),
+        .macOS(.v10_15),
     ],
     products: [
         .library(
@@ -19,7 +20,6 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/tadija/AEXML.git", exact: "4.7.0"),
-        .package(url: "https://github.com/Thomvis/BrightFutures.git", exact: "8.2.0"),
         .package(url: "https://github.com/cezheng/Fuzi.git", exact: "3.1.3"),
 
         .package(url: "https://github.com/kylef/Commander.git", exact: "0.9.2"),
@@ -31,7 +31,6 @@ let package = Package(
             name: "WSDL2SwiftPM",
             dependencies: [
                 "AEXML",
-                "BrightFutures",
                 "Fuzi",
             ],
             path: "Sources/WSDL2SwiftPM",

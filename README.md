@@ -18,7 +18,6 @@ Output
 * a Swift file which works as SOAP client
 	* Swift 5
 	* URLSession for connection
-	* [BrightFutures](https://github.com/Thomvis/BrightFutures) for returning asynchronous requests
 	* [Fuzi](https://github.com/cezheng/Fuzi) for fast parsing xmls
 	* [AEXML](https://github.com/tadija/AEXML) for generating xmls
 
@@ -51,8 +50,8 @@ generated code from example by w3schools temperature converter:
 ```swift
 public struct TempConvert: WSDLService {
 	:
-    public func request(_ parameters: TempConvert_CelsiusToFahrenheit) -> Future<TempConvert_CelsiusToFahrenheitResponse, WSDLOperationError> {
-        return requestGeneric(parameters)
+    public func request(_ parameters: TempConvert_CelsiusToFahrenheit) async throws -> TempConvert_CelsiusToFahrenheitResponse {
+        return try await requestGeneric(parameters)
     }
     :
 }
@@ -75,9 +74,7 @@ code using the generated client:
 
 ```swift
 let service = TempConvert(endpoint: "https://www.w3schools.com")
-service.request(TempConvert_CelsiusToFahrenheit(Celsius: "23.4")).onComplete { r in
-    NSLog("%@", "TempConvert_CelsiusToFahrenheit(Celsius: \"23.4\") = \(r)")
-}
+let result = try await service.request(TempConvert_CelsiusToFahrenheit(Celsius: "23.4"))
 ```
 
 with dependencies in `Package.swift`:
@@ -139,7 +136,7 @@ let stub = Toki.stub(
 )
 defer { Toki.removeStub(stub) }
 
-let result = try await service.request(YourService_RequestType()).get()
+let result = try await service.request(YourService_RequestType())
 ```
 
 ### Customize
@@ -162,6 +159,6 @@ usage point of view...
 
 * initialize Service with endpoint URL (endpoint URL can be changed after generating `WSDL+(ServiceName).swift`)
 * initialize request parameter with `ServiceName_OperationName(...)`
-* `Service.request(param)` to get `Future` that will be completed by `URLSession` completion
+* `try await Service.request(param)` to get response completed by `URLSession`
 * parameters and models are typed by xsd definition (even with nullability)
 
