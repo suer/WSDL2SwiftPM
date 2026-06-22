@@ -24,9 +24,7 @@ struct TempConvertTests {
             Toki.removeStub(stub)
         }
 
-        let future = service.request(TempConvert_CelsiusToFahrenheit(Celsius: "30"))
-
-        let result = try await future.get()
+        let result = try await service.request(TempConvert_CelsiusToFahrenheit(Celsius: "30"))
 
         #expect(result.CelsiusToFahrenheitResult == "999")
     }
@@ -42,9 +40,7 @@ struct TempConvertTests {
             Toki.removeStub(stub)
         }
 
-        let future = service.request(TempConvert_FahrenheitToCelsius(Fahrenheit: "80"))
-
-        let result = try await future.get()
+        let result = try await service.request(TempConvert_FahrenheitToCelsius(Fahrenheit: "80"))
 
         #expect(result.FahrenheitToCelsiusResult == "1234")
     }
