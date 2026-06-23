@@ -17,6 +17,9 @@ let package = Package(
         .executable(
             name: "WSDL2SwiftPMCLI",
             targets: ["WSDL2SwiftPMCLI"]),
+        .plugin(
+            name: "WSDL2SwiftPMPlugin",
+            targets: ["WSDL2SwiftPMPlugin"]),
     ],
     dependencies: [
         .package(url: "https://github.com/tadija/AEXML.git", exact: "4.7.0"),
@@ -56,6 +59,12 @@ let package = Package(
             resources: [
                 .copy("Stencils")
             ],
+        ),
+        .plugin(
+            name: "WSDL2SwiftPMPlugin",
+            capability: .buildTool(),
+            dependencies: ["WSDL2SwiftPMCLI"],
+            path: "Sources/WSDL2SwiftPMPlugin"
         ),
         .testTarget(
             name: "WSDL2SwiftPMTests",
