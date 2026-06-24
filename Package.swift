@@ -72,6 +72,8 @@ let package = Package(
                 "WSDL2SwiftPM"
             ],
             path: "Tests/WSDL2SwiftPMTests",
+            exclude: ["tempconvert.xml"],
+            plugins: [.plugin(name: "WSDL2SwiftPMPlugin")]
         ),
         .testTarget(
             name: "TokiTests",
@@ -80,6 +82,8 @@ let package = Package(
                 "Toki",
             ],
             path: "Tests/TokiTests",
+            exclude: ["tempconvert.xml"],
+            plugins: [.plugin(name: "WSDL2SwiftPMPlugin")]
         ),
     ],
 )
