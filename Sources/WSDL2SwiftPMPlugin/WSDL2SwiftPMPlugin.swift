@@ -15,24 +15,6 @@ struct WSDL2SwiftPMPlugin: BuildToolPlugin {
     }
 }
 
-#if canImport(XcodeProjectPlugin)
-import XcodeProjectPlugin
-
-extension WSDL2SwiftPMPlugin: XcodeBuildToolPlugin {
-    func createBuildCommands(context: XcodePluginContext, target: XcodeTarget) throws -> [Command] {
-        let inputFiles = target.inputFiles
-            .filter { ["wsdl", "xsd", "xml"].contains($0.path.extension?.lowercased() ?? "") }
-            .map { URL(fileURLWithPath: $0.path.string) }
-            .sorted { $0.path < $1.path }
-        return try makeCommands(
-            inputFiles: inputFiles,
-            outputDir: context.pluginWorkDirectory,
-            tool: context.tool(named: "WSDL2SwiftPMCLI").path
-        )
-    }
-}
-#endif
-
 private func wsdlFiles(in directory: URL) -> [URL] {
     return ((try? FileManager.default.contentsOfDirectory(
         at: directory,
@@ -74,7 +56,8 @@ private func makeCommands(inputFiles: [URL], outputDir: Path, tool: Path) throws
         .buildCommand(
             displayName: "Generate Swift from WSDL",
             executable: tool,
-            arguments: ["--out", outputDir.appending("WSDL.swift").string]
+            arguments: ["--out", outputDir.appending("WSDL.swift").string,
+                        "--public-memberwise-init"]
                 + inputFiles.map(\.path),
             inputFiles: inputFiles.map { Path($0.path) },
             outputFiles: outputFiles
