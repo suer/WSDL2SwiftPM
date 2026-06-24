@@ -40,6 +40,69 @@ swift run WSDL2SwiftPMCLI --public-memberwise-init --out Tests/WSDL2SwiftPMTests
 the order of input files is important.
 referenced XSDs should be placed immediately after referencing WSDL.
 
+### Using SPM Build Plugin
+
+`WSDL2SwiftPMPlugin` automatically generates Swift client code from WSDL files at build time.
+
+Add the plugin to your `Package.swift`:
+
+```swift
+// in dependencies:
+.package(url: "https://github.com/suer/WSDL2SwiftPM.git", exact: "x.y.z"),
+
+// in targets:
+.target(
+    name: "YourTarget",
+    dependencies: [
+        .product(name: "WSDL2SwiftPM", package: "WSDL2SwiftPM"),
+    ],
+    plugins: [
+        .plugin(name: "WSDL2SwiftPMPlugin", package: "WSDL2SwiftPM"),
+    ]
+),
+```
+
+#### Auto-detection mode
+
+Place `.wsdl`, `.xsd`, or `.xml` files in the target's Sources directory. The plugin detects them automatically — no configuration file needed.
+
+```
+Sources/YourTarget/YourService.wsdl
+```
+
+#### Configuration with `wsdl2swift.json`
+
+For more control, place a `wsdl2swift.json` at the package root or inside the target's Sources directory:
+
+```json
+{
+  "inputs": [
+    "./Sources/YourTarget/your.wsdl"
+  ],
+  "output": "${DERIVED_SOURCES_DIR}/WSDL.swift",
+  "publicMemberwiseInit": true
+}
+```
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `inputs` | `[String]` | Paths to input files, relative to the config file. Omit to use auto-detection. |
+| `output` | `String` | Output directory path. The filename portion is ignored — generated files are always named `WSDL+<ServiceName>.swift`. Supports variable substitution. |
+| `publicMemberwiseInit` | `Bool` | Generate `public` memberwise initializers. Required when the target is imported from another module. Default: `false`. |
+
+The following variables can be used in string values:
+
+| Variable | Value |
+|----------|-------|
+| `${DERIVED_SOURCES_DIR}` | Plugin's output directory |
+| `${PROJECT_DIR}` | Package root directory |
+| `${TARGET_NAME}` | Target name |
+| `${PRODUCT_MODULE_NAME}` | Module name |
+
+#### Generated output
+
+The plugin generates `WSDL+<ServiceName>.swift` in the plugin's work directory. The file is compiled automatically as part of the target.
+
 ### Use In App
 
 add WSDL.swift to your project and use:
