@@ -17,6 +17,9 @@ let package = Package(
         .executable(
             name: "WSDL2SwiftPMCLI",
             targets: ["WSDL2SwiftPMCLI"]),
+        .plugin(
+            name: "WSDL2SwiftPMPlugin",
+            targets: ["WSDL2SwiftPMPlugin"]),
     ],
     dependencies: [
         .package(url: "https://github.com/tadija/AEXML.git", exact: "4.7.0"),
@@ -57,12 +60,20 @@ let package = Package(
                 .copy("Stencils")
             ],
         ),
+        .plugin(
+            name: "WSDL2SwiftPMPlugin",
+            capability: .buildTool(),
+            dependencies: ["WSDL2SwiftPMCLI"],
+            path: "Sources/WSDL2SwiftPMPlugin"
+        ),
         .testTarget(
             name: "WSDL2SwiftPMTests",
             dependencies: [
                 "WSDL2SwiftPM"
             ],
             path: "Tests/WSDL2SwiftPMTests",
+            exclude: ["tempconvert.wsdl"],
+            plugins: [.plugin(name: "WSDL2SwiftPMPlugin")]
         ),
         .testTarget(
             name: "TokiTests",
@@ -71,6 +82,8 @@ let package = Package(
                 "Toki",
             ],
             path: "Tests/TokiTests",
+            exclude: ["tempconvert.wsdl"],
+            plugins: [.plugin(name: "WSDL2SwiftPMPlugin")]
         ),
     ],
 )

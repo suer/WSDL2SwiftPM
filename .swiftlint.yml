@@ -2,8 +2,6 @@ included:
   - WSDL2Swift
   - WSDL2Swift.swift
   - Tests
-excluded:
-  - Tests/WSDL2SwiftTests/WSDL+TempConvert.swift
 disabled_rules:
   - trailing_comma # covered-by swift-format
   - opening_brace # covered-by swift-format

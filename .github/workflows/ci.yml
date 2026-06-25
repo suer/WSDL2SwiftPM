@@ -73,14 +73,7 @@ jobs:
 
       - name: Run build
         run: |
-          swift build --triple "$TARGET_TRIPLE" -Xswiftc -sdk -Xswiftc $(xcrun --sdk iphonesimulator --show-sdk-path) -Xcc -isysroot -Xcc $(xcrun --sdk iphonesimulator --show-sdk-path)
-        env:
-          TARGET_TRIPLE: arm64-apple-ios18.0-simulator
-
-      - name: Generate SOAP client code
-        run: |
-          swift run WSDL2SwiftPMCLI --public-memberwise-init --out Tests/WSDL2SwiftPMTests/WSDL.swift Tests/tempconvert.xml
-          swift run WSDL2SwiftPMCLI --public-memberwise-init --out Tests/TokiTests/WSDL.swift Tests/tempconvert.xml
+          swift build
 
       - name: Run test
         run: |
