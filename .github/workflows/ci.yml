@@ -73,9 +73,7 @@ jobs:
 
       - name: Run build
         run: |
-          swift build --triple "$TARGET_TRIPLE" -Xswiftc -sdk -Xswiftc $(xcrun --sdk iphonesimulator --show-sdk-path) -Xcc -isysroot -Xcc $(xcrun --sdk iphonesimulator --show-sdk-path)
-        env:
-          TARGET_TRIPLE: arm64-apple-ios18.0-simulator
+          swift build
 
       - name: Run test
         run: |
