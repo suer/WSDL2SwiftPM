@@ -64,7 +64,7 @@ Add the plugin to your `Package.swift`:
 
 #### Auto-detection mode
 
-Place `.wsdl`, `.xsd`, or `.xml` files in the target's Sources directory. The plugin detects them automatically — no configuration file needed.
+Place `.wsdl` or `.xsd` files in the target's Sources directory. The plugin detects them automatically — no configuration file needed.
 
 ```
 Sources/YourTarget/YourService.wsdl
@@ -86,9 +86,9 @@ For more control, place a `wsdl2swift.json` at the package root or inside the ta
 
 | Key | Type | Description |
 |-----|------|-------------|
-| `inputs` | `[String]` | Paths to input files, relative to the config file. Omit to use auto-detection. |
+| `inputs` | `[String]` | Paths to input files, relative to the config file. Any file extension is accepted. Omit to use auto-detection. |
 | `output` | `String` | Output directory path. The filename portion is ignored — generated files are always named `WSDL+<ServiceName>.swift`. Supports variable substitution. |
-| `publicMemberwiseInit` | `Bool` | Generate `public` memberwise initializers. Required when the target is imported from another module. Default: `false`. |
+| `publicMemberwiseInit` | `Bool` | Generate `public` memberwise initializers. Required when the target is imported from another module. Default: `true`. |
 
 The following variables can be used in string values:
 

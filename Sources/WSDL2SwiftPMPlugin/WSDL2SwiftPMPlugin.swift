@@ -23,14 +23,14 @@ struct WSDL2SwiftPMPlugin: BuildToolPlugin {
         }
 
         let inputFiles = wsdlFiles(in: URL(fileURLWithPath: target.directory.string))
-        return makeCommands(inputFiles: inputFiles, outputDir: outputDir, tool: tool, publicMemberwiseInit: false)
+        return makeCommands(inputFiles: inputFiles, outputDir: outputDir, tool: tool, publicMemberwiseInit: true)
     }
 }
 
 private struct WSDLPluginConfig: Codable {
     var inputs: [String]?
     var output: String?
-    var publicMemberwiseInit: Bool = false
+    var publicMemberwiseInit: Bool?
 }
 
 private func parseConfig(from path: Path) -> WSDLPluginConfig? {
@@ -68,7 +68,7 @@ private func makeCommandsFromConfig(configPath: Path, outputDir: Path, tool: Pat
         resolvedOutputDir = outputDir
     }
 
-    return makeCommands(inputFiles: inputFiles, outputDir: resolvedOutputDir, tool: tool, publicMemberwiseInit: config.publicMemberwiseInit)
+    return makeCommands(inputFiles: inputFiles, outputDir: resolvedOutputDir, tool: tool, publicMemberwiseInit: config.publicMemberwiseInit ?? true)
 }
 
 private func wsdlFiles(in directory: URL) -> [URL] {
@@ -77,13 +77,12 @@ private func wsdlFiles(in directory: URL) -> [URL] {
         includingPropertiesForKeys: nil,
         options: .skipsHiddenFiles
     )) ?? [])
-    .filter { ["wsdl", "xsd", "xml"].contains($0.pathExtension.lowercased()) }
+    .filter { ["wsdl", "xsd"].contains($0.pathExtension.lowercased()) }
     .sorted { $0.path < $1.path }
 }
 
 private func serviceNames(from files: [URL]) -> [String] {
     return files
-        .filter { ["wsdl", "xml"].contains($0.pathExtension.lowercased()) }
         .flatMap { url -> [String] in
             guard
                 let data = try? Data(contentsOf: url),

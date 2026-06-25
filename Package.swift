@@ -72,7 +72,7 @@ let package = Package(
                 "WSDL2SwiftPM"
             ],
             path: "Tests/WSDL2SwiftPMTests",
-            exclude: ["tempconvert.xml"],
+            exclude: ["tempconvert.wsdl"],
             plugins: [.plugin(name: "WSDL2SwiftPMPlugin")]
         ),
         .testTarget(
@@ -82,7 +82,7 @@ let package = Package(
                 "Toki",
             ],
             path: "Tests/TokiTests",
-            exclude: ["tempconvert.xml"],
+            exclude: ["tempconvert.wsdl"],
             plugins: [.plugin(name: "WSDL2SwiftPMPlugin")]
         ),
     ],
