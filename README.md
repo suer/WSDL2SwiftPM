@@ -54,7 +54,7 @@ Add the plugin to your `Package.swift`:
 .target(
     name: "YourTarget",
     dependencies: [
-        .product(name: "WSDL2SwiftPM", package: "WSDL2SwiftPM"),
+        "WSDL2SwiftPM",
     ],
     plugins: [
         .plugin(name: "WSDL2SwiftPMPlugin", package: "WSDL2SwiftPM"),
@@ -79,7 +79,7 @@ For more control, place a `wsdl2swift.json` at the package root or inside the ta
   "inputs": [
     "./Sources/YourTarget/your.wsdl"
   ],
-  "output": "${DERIVED_SOURCES_DIR}/WSDL.swift",
+  "outputDir": "${DERIVED_SOURCES_DIR}/",
   "publicMemberwiseInit": true
 }
 ```
@@ -87,7 +87,7 @@ For more control, place a `wsdl2swift.json` at the package root or inside the ta
 | Key | Type | Description |
 |-----|------|-------------|
 | `inputs` | `[String]` | Paths to input files, relative to the config file. Any file extension is accepted. Omit to use auto-detection. |
-| `output` | `String` | Output directory path. The filename portion is ignored — generated files are always named `WSDL+<ServiceName>.swift`. Supports variable substitution. |
+| `outputDir` | `String` | Output directory path. Generated files are always named `WSDL+<ServiceName>.swift`. Supports variable substitution. Omit to use `${DERIVED_SOURCES_DIR}`. |
 | `publicMemberwiseInit` | `Bool` | Generate `public` memberwise initializers. Required when the target is imported from another module. Default: `true`. |
 
 The following variables can be used in string values:

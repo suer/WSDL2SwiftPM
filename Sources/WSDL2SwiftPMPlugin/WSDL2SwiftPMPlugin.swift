@@ -29,7 +29,7 @@ struct WSDL2SwiftPMPlugin: BuildToolPlugin {
 
 private struct WSDLPluginConfig: Codable {
     var inputs: [String]?
-    var output: String?
+    var outputDir: String?
     var publicMemberwiseInit: Bool?
 }
 
@@ -61,9 +61,8 @@ private func makeCommandsFromConfig(configPath: Path, outputDir: Path, tool: Pat
     }
 
     let resolvedOutputDir: Path
-    if let outputStr = config.output {
-        let expanded = expandVariables(outputStr, variables: variables)
-        resolvedOutputDir = Path(URL(fileURLWithPath: expanded).deletingLastPathComponent().path)
+    if let outputDirStr = config.outputDir {
+        resolvedOutputDir = Path(expandVariables(outputDirStr, variables: variables))
     } else {
         resolvedOutputDir = outputDir
     }
