@@ -22,7 +22,7 @@ let package = Package(
             targets: ["WSDL2SwiftPMPlugin"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/tadija/AEXML.git", exact: "4.7.0"),
+        .package(url: "https://github.com/tadija/AEXML.git", exact: "4.7.2"),
         .package(url: "https://github.com/cezheng/Fuzi.git", exact: "3.1.3"),
 
         .package(url: "https://github.com/kylef/Commander.git", exact: "0.9.2"),
